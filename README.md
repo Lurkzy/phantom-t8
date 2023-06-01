@@ -15,11 +15,13 @@
     <a href="https://github.com/Lurkzy/phantom-t8/issues">Request Feature</a>
   </p>
     
+  <p align="left">
   ## Prerequisites
   <ul>
       <li><a href='https://github.com/Lurkzy/phantom-t8/releases'>Visual Studio Code</a></li>
       <li><a href='https://github.com/Lurkzy/phantom-t8/releases'>T7Compiler</a></li>
   </ul>
+  </p>
 
   ## Installation
   You can download the latest source from the release section of our <a href='https://github.com/Lurkzy/phantom-t8/releases'>repository</a>.
