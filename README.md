@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Lurkzy/phantom-t8">
-    <img src="images/preview.png" alt="Logo" width="300" height="300">
+    <img src="images/preview.png" alt="Logo" width="300" height="800">
   </a>
   <h3 align="center">Phantom T8</h3>
 
@@ -14,15 +14,13 @@
     ·
     <a href="https://github.com/Lurkzy/phantom-t8/issues">Request Feature</a>
   </p>
-    
-  <p align="left">
+</div>
+
   ## Prerequisites
   <ul>
       <li><a href='https://github.com/Lurkzy/phantom-t8/releases'>Visual Studio Code</a></li>
       <li><a href='https://github.com/Lurkzy/phantom-t8/releases'>T7Compiler</a></li>
   </ul>
-  </p>
 
   ## Installation
   You can download the latest source from the release section of our <a href='https://github.com/Lurkzy/phantom-t8/releases'>repository</a>.
-</div>
