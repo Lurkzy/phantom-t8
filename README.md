@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Lurkzy/phantom-t8">
-    <img src="images/preview.png" alt="Logo" width="300" height="800">
+    <img src="images/preview.png" alt="Logo" width="800" height="300">
   </a>
   <h3 align="center">Phantom T8</h3>
 
@@ -23,4 +23,4 @@
   </ul>
 
   ## Installation
-  You can download the latest source from the release section of our <a href='https://github.com/Lurkzy/phantom-t8/releases'>repository</a>.
+  You can download the latest source from the <a href='https://github.com/Lurkzy/phantom-t8/releases'>release</a> section of our repository.
