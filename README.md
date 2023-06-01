@@ -24,7 +24,12 @@
 
   ## Installation
   You can download the latest source from the <a href='https://github.com/Lurkzy/phantom-t8/releases'>release</a> section of our repository.
+  
   ## Credits
-  <a href='https://twitter.com/plugwalker47'>Joey</a> - a few functions
-  <a href='https://twitter.com/friktos'>Friktos</a> - ideas
-  <a href='https://twitter.com/BradLikesTweets'>Brad</a> - nac mod
+<ul>
+    <li>Joey</li>
+    <li>Friktos</li>
+    <li>Brad</li>
+    <li>Sagei</li>
+    <li>Panela</li>
+</ul>
