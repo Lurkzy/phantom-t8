@@ -355,6 +355,42 @@ trickshot_aimbot()
     }
 }
 
+equipment_aimbot()
+{
+    self.pers["equipment_aimbot"] = isDefined(self.pers["equipment_aimbot"]) ? undefined : true;
+
+    if(isDefined(self.pers["equipment_aimbot"]))
+    {
+        self endon("disconnect");
+ 
+        while(isdefined(self.pers["equipment_aimbot"])) 
+        {
+            self waittill(#"weapon_fired");
+
+            start = self geteye();
+            end = start + anglestoforward(self getplayerangles()) * 1000000;
+            trace = bullettrace(start, end, false, self)["position"];
+            foreach(equipment in level.claymore_array)
+            {
+                if(!isdefined(self.pers["aimbot_range"]))
+                    self.pers["aimbot_range"] = 50;
+
+                if(distance(trace, equipment.origin) <= self.pers["aimbot_range"])
+                {
+                    if(isdefined(self.pers["aimbot_weapon"]) && self getcurrentweapon() == self.pers["aimbot_weapon"])
+                    {
+                        if(isdefined(self.pers["aimbot_delay"]))
+                            wait self.pers["aimbot_delay"];
+
+                        equipment detonate();
+                    }
+                }
+            }
+        }
+
+    }
+}
+
 unfair_aimbot()
 {
     self.pers["unfair_aimbot"] = isDefined(self.pers["unfair_aimbot"]) ? undefined : true;
@@ -597,7 +633,7 @@ glitchWeapon(weapon)
 
 fade_to_black_bind(value)
 {
-    self.pers["fade_to_black"] = isDefined(self.pers["fade_to_black"]) ? undefined : true;
+    self.pers["fade_to_black"] = isDefined(self.pers["fade_to_black"]) ? undefined : value;
     if(isDefined(self.pers["fade_to_black"]))
     {
         self endon("disconnect");
@@ -618,7 +654,7 @@ fade_to_black_bind(value)
 
 nac_mod_bind(value)
 {
-    self.pers["nac_mod"] = isDefined(self.pers["nac_mod"]) ? undefined : true;
+    self.pers["nac_mod"] = isDefined(self.pers["nac_mod"]) ? undefined : value;
     if(isDefined(self.pers["nac_mod"]))
     {
         self endon("disconnect");
@@ -697,7 +733,7 @@ canswap_nac_mod()
 
 scavenger_bind(value)
 {
-    self.pers["scavenger"] = isDefined(self.pers["scavenger"]) ? undefined : true;
+    self.pers["scavenger"] = isDefined(self.pers["scavenger"]) ? undefined : value;
     if(isDefined(self.pers["scavenger"]))
     {
         self endon("disconnect");
@@ -748,7 +784,7 @@ stzTilt(value)
 
 hitmarker_bind(value)
 {
-    self.pers["hitmarker"] = isDefined(self.pers["hitmarker"]) ? undefined : true;
+    self.pers["hitmarker"] = isDefined(self.pers["hitmarker"]) ? undefined : value;
     if(isDefined(self.pers["hitmarker"]))
     {
         self endon("disconnect");
@@ -773,7 +809,7 @@ hitmarker_bind(value)
 
 damage_bind(value)
 {
-    self.pers["damage"] = isDefined(self.pers["damage"]) ? undefined : true;
+    self.pers["damage"] = isDefined(self.pers["damage"]) ? undefined : value;
     if(isDefined(self.pers["damage"]))
     {
         self endon("disconnect");
@@ -798,7 +834,7 @@ damage_bind(value)
 
 hellstorm_bind(value)
 {
-    self.pers["hellstorm"] = isDefined(self.pers["hellstorm"]) ? undefined : true;
+    self.pers["hellstorm"] = isDefined(self.pers["hellstorm"]) ? undefined : value;
     if(isDefined(self.pers["hellstorm"]))
     {
         self endon("disconnect");
@@ -823,7 +859,7 @@ hellstorm_bind(value)
 
 prone_bind(value)
 {
-    self.pers["prone"] = isDefined(self.pers["prone"]) ? undefined : true;
+    self.pers["prone"] = isDefined(self.pers["prone"]) ? undefined : value;
     if(isDefined(self.pers["prone"]))
     {
         self endon("disconnect");
@@ -848,7 +884,7 @@ prone_bind(value)
 
 fade_to_white_bind(value)
 {
-    self.pers["white_flash"] = isDefined(self.pers["white_flash"]) ? undefined : true;
+    self.pers["white_flash"] = isDefined(self.pers["white_flash"]) ? undefined : value;
     if(isDefined(self.pers["white_flash"]))
     {
         self endon("disconnect");
@@ -873,7 +909,7 @@ fade_to_white_bind(value)
 
 give_bomb_bind(value)
 {
-    self.pers["bomb"] = isDefined(self.pers["bomb"]) ? undefined : true;
+    self.pers["bomb"] = isDefined(self.pers["bomb"]) ? undefined : value;
     if(isDefined(self.pers["bomb"]))
     {
         self endon("disconnect");
@@ -909,7 +945,7 @@ give_bomb_bind(value)
 
 jammed_bind(value)
 {
-    self.pers["jammed"] = isDefined(self.pers["jammed"]) ? undefined : true;
+    self.pers["jammed"] = isDefined(self.pers["jammed"]) ? undefined : value;
     if(isDefined(self.pers["jammed"]))
     {
         self endon("disconnect");
@@ -945,7 +981,7 @@ jammed_bind(value)
 
 set_to_one_bind(value)
 {
-    self.pers["set_to_one"] = isDefined(self.pers["set_to_one"]) ? undefined : true;
+    self.pers["set_to_one"] = isDefined(self.pers["set_to_one"]) ? undefined : value;
     if(isDefined(self.pers["set_to_one"]))
     {
         self endon("disconnect");
@@ -969,7 +1005,7 @@ set_to_one_bind(value)
 
 shax_bind(value)
 {
-    self.pers["shax"] = isDefined(self.pers["shax"]) ? undefined : true;
+    self.pers["shax"] = isDefined(self.pers["shax"]) ? undefined : value;
     if(isDefined(self.pers["shax"]))
     {
         self endon("disconnect");
@@ -1176,3 +1212,11 @@ remove_death_all_barriers()
     }
 }
 
+toggle_hud()
+{
+    self.pers["hud"] = isdefined(self.pers["hud"]) ? undefined : true;
+    if(isdefined(self.pers["hud"]))
+        self val::set(#"hash_3c30825a658c87fd", "show_hud", 0);
+    else
+		self val::reset(#"hash_3c30825a658c87fd", "show_hud");
+}

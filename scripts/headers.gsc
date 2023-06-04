@@ -34,6 +34,7 @@
 #using script_7dd6557e89e9840b.gsc; // remote missile
 #using script_1af22ad25a2111f7.gsc; // emp stuff
 #using scripts\core_common\lui_shared.gsc; // lui shared
+#using script_8988fdbc78d6c53.gsc; // weapon objects
 
 #namespace bb;
 

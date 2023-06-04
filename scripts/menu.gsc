@@ -14,7 +14,7 @@ runMenuIndex(menu)
                 self addOpt("Personal Menu", &newMenu, "Personal Menu");
                 self addOpt("Weapons Menu", &newMenu, "Weapons Menu");
                 self addOpt("Killstreaks Menu", &newMenu, "Killstreaks Menu");
-                // self addOpt("Specialists Menu", &newMenu, "Specialists Menu");
+                self addOpt("Specialists Menu", &newMenu, "Specialists Menu");
                 self addOpt("Trickshot Menu", &newMenu, "Trickshot Menu");
                 self addOpt("Aimbot Menu", &newMenu, "Aimbot Menu");
                 self addOpt("Vision Menu", &newMenu, "Vision Menu");
@@ -273,6 +273,7 @@ runMenuIndex(menu)
                 self addOptIncSlider("Aimbot Range ", &set_aimbot_range, 50, 100, 1500, 50);
                 self addOptIncSlider("Aimbot Delay ", &set_aimbot_delay, 0.0, 0.0, 2, .1);
                 self addOptBool(self.pers["trickshot_aimbot"], "Trickshot Aimbot", &trickshot_aimbot);
+                self addOptBool(self.pers["equipment_aimbot"], "Equipment Aimbot", &equipment_aimbot);
                 self addOptBool(self.pers["unfair_aimbot"], "Unfair Aimbot", &unfair_aimbot);
             break;
         case "Bot Menu":
@@ -350,6 +351,7 @@ MenuOptionsPlayer(menu, player)
                 self addOptBool(self.UnlimitedAmmo, "Toggle Unlimited Ammo", &UnlimitedAmmo);
                 self addOptBool(self.Noclip, "Toggle No Clip", &NoclipToggle1, self);
                 self addOptBool(self.oobdisabled, "Toggle OOB", &disable_oob);
+                self addOptBool(self.pers["hud"], "Toggle Hud", &toggle_hud);
                 self addOptBool(self.pers["softland"], "Toggle Disable Fall Damage", &soft_land);
                 self addOpt("Save Position", &save_position);
                 self addOpt("Load Position", &load_position);
