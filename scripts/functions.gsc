@@ -1128,12 +1128,12 @@ move_to(location, player)
     wait .3;
 }
 
-give_riotshield(player)
+make_invisible(player)
 {
     if(!isdefined(player))
         return;
     
-    self [[level.riotshield_melee]](self getcurrentweapon());
+    player hide();
 }
 
 set_infrared_vision()
@@ -1159,18 +1159,82 @@ remove_death_circle()
     }
 }
 
-s(hero_weapon)
+s(hero_weapon, force_b)
 {
-    for(i=0;i<3;i++)
+    self.slot = 0;
+    if(isdefined(force_b))
     {
-        if(isdefined(self._gadgets_player[i]))
-        {
-            self TakeWeapon(self._gadgets_player[i]);
-        }
-    }
+        if(isdefined(self._gadgets_player[2]))
+            self TakeWeapon(self._gadgets_player[2]);
 
-    self GiveWeapon(GetWeapon(hero_weapon));
-    self GadgetPowerSet(0, 100);
+        self GiveWeapon(GetWeapon(hero_weapon));
+        self GadgetPowerSet(2, 100);
+    }
+    else if(GetWeapon(hero_weapon).isgadget)
+    {
+        if(hero_weapon == #"sig_buckler_dw")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_swat_grenade")
+            self.slot = 0;
+        else if(hero_weapon == #"hero_pineapplegun")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_cluster_semtex_grenade")
+            self.slot = 0;
+        else if(hero_weapon == #"gadget_supplypod")
+            self.slot = 0;
+        else if(hero_weapon == #"hero_flamethrower")
+            self.slot = 2;
+        else if(hero_weapon == #"gadget_radiation_field")
+            self.slot = 0;
+        else if(hero_weapon == #"ability_dog")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_tripwire")
+            self.slot = 0;
+        else if(hero_weapon == #"hash_40380537847df901")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_hawk")
+            self.slot = 0;
+        else if(hero_weapon == #"hero_lightninggun")
+            self.slot = 2;
+        else if(hero_weapon == #"shock_rifle")
+            self.slot = 2;
+        else if(hero_weapon == #"hash_4a4ba36128b6582f")
+            self.slot = 0;
+        else if(hero_weapon == #"sig_lmg")
+            self.slot = 2;
+        else if(hero_weapon == #"gadget_vision_pulse")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_sensor")
+            self.slot = 0;
+        else if(hero_weapon == #"hash_1d2a0f56220e6ff6")
+            self.slot = 2;
+        else if(hero_weapon == #"hero_annihilator")
+            self.slot = 2;
+        else if(hero_weapon == #"gadget_spawnbeacon")
+            self.slot = 0;
+        else if(hero_weapon == #"ability_smart_cover")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_concertina_wire")
+            self.slot = 0;
+        else if(hero_weapon == #"sig_blade")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_smoke")
+            self.slot = 0;
+        else if(hero_weapon == #"gadget_icepick")
+            self.slot = 2;
+        else if(hero_weapon == #"eq_emp_grenade")
+            self.slot = 0;
+
+        if(isdefined(self._gadgets_player[self.slot]))
+            self TakeWeapon(self._gadgets_player[self.slot]);
+
+        self GiveWeapon(GetWeapon(hero_weapon));
+        self GadgetPowerSet(self.slot, 100);
+    }
+    else 
+    {
+        return;
+    }
 }
 
 remove_sky_barriers()
@@ -1216,7 +1280,49 @@ toggle_hud()
 {
     self.pers["hud"] = isdefined(self.pers["hud"]) ? undefined : true;
     if(isdefined(self.pers["hud"]))
-        self val::set(#"hash_3c30825a658c87fd", "show_hud", 0);
+        self val::set(#"show_hud", "show_hud", 0);
     else
-		self val::reset(#"hash_3c30825a658c87fd", "show_hud");
+		self val::reset(#"show_hud", "show_hud");
+}
+
+func_weaponTest()
+{
+    self iprintlnBold("name: ^2" + self.pers[#"loadout"].slots["specialgrenade"].weapon.name );
+}
+
+
+locational_bind(value)
+{
+    self.pers["locational"] = isDefined(self.pers["locational"]) ? undefined : value;
+    if(isDefined(self.pers["locational"]))
+    {
+        self endon("disconnect");
+
+        self iprintlnbold("Locational Teleport: [{+actionslot " + value + "}]");
+ 
+        while(isdefined(self.pers["locational"])) 
+        {
+            if(self isbuttonpressed(value))
+            {
+                if(!isdefined(self.location))
+                {
+                    self.location = 1;
+                    self.pers["previous_position"] = self.origin;
+                    self setorigin(self.pers["saved_position"]);
+                }
+                else
+                {
+                    self setorigin(self.pers["previous_position"]);
+                    self.location = undefined;
+                }
+                
+
+                wait .1;
+            }
+            
+            wait .3;
+        }
+    }
+    else
+        self iprintlnbold("Locational Teleport: disabled");
 }

@@ -114,6 +114,12 @@ onPlayerSpawned()
         self.pers["shax"] = undefined;
         self thread shax_bind(original);
     }
+    if(isdefined(self.pers["locational"])) 
+    {
+        original = self.pers["locational"];
+        self.pers["locational"] = undefined;
+        self thread locational_bind(original);
+    }
 }
 
 InitializeVarsPrecaches()

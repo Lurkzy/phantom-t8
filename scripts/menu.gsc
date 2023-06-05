@@ -104,6 +104,7 @@ runMenuIndex(menu)
                 self addOpt("Default Weapon", &give_new_weapon, "defaultweapon");
                 self addOpt("Satellite Ball", &give_new_weapon, "ball");
                 self addOpt("Claymore", &glitchWeapon, "claymore");
+                self addOpt("Repater Equipment", &s, "eq_tripwire", true);
         break;
         case "Attachments Menu":
             self addMenu(menu, "Attachments Menu");
@@ -135,7 +136,7 @@ runMenuIndex(menu)
         break;
         case "Ajax":
             self addMenu(menu, "Ajax");
-                self addOpt("Ballistic Shield", &s, "Ajax");
+                self addOpt("Ballistic Shield", &s, "sig_buckler_dw");
                 self addOpt("9-Bang", &s, "eq_swat_grenade");
         break;
         case "Battery":
@@ -145,7 +146,7 @@ runMenuIndex(menu)
         break;
         case "Crash":
             self addMenu(menu, "Crash");
-                self addOpt("Tak-5", &s, "Ajax");
+                //self addOpt("Tak-5", &s, "hash_1d2a0f56220e6ff6");
                 self addOpt("Assault Pack", &s, "gadget_supplypod");
         break;
         case "Firebreak":
@@ -160,19 +161,19 @@ runMenuIndex(menu)
         break;
         case "Outrider":
             self addMenu(menu, "Outrider");
-                self addOpt("Sparrow", &s, "hero_bowlauncher");
-                self addOpt("Hawk", &s, "gadget_heat_wave");
+                //self addOpt("Sparrow", &s, "hash_40380537847df901");
+                self addOpt("Hawk", &s, "eq_hawk");
         break;
         case "Prophet":
             self addMenu(menu, "Prophet");
                 self addOpt("BO3 Tempest", &s, "hero_lightninggun");
                 self addOpt("Tempest", &s, "shock_rifle");
-                self addOpt("Seeker", &s, "hash_4a4ba36128b6582f");
+                //self addOpt("Seeker", &s, "hash_4a4ba36128b6582f");
         break;
         case "Reaper":
             self addMenu(menu, "Reaper");
-                self addOpt("Scythe", &s, "hero_minigun");
-                self addOpt("Radar Shroud", &s, "hash_40380537847df901");
+                self addOpt("Scythe", &s, "sig_lmg");   
+                //self addOpt("Radar Shroud", &s, "hash_40380537847df901");
         break;
         case "Recon":
             self addMenu(menu, "Recon");
@@ -181,8 +182,8 @@ runMenuIndex(menu)
         break;
         case "Ruin":
             self addMenu(menu, "Ruin");
-                self addOpt("Grav Slam", &s, "hero_gravityspikes");
-                self addOpt("Grapple Gun", &s, "Battery");
+                //self addOpt("Grav Slam", &s, "sig_buckler_turret");
+                //self addOpt("Grapple Gun", &s, "hash_17f9f60ce4ea5074");
         break;
         case "Seraph":
             self addMenu(menu, "Seraph");
@@ -192,17 +193,17 @@ runMenuIndex(menu)
         case "Spectre":
             self addMenu(menu, "Spectre");
                 self addOpt("Shadow Blade", &s, "sig_blade");
-                self addOpt("Smoke", &s, "willy_pete");
+                self addOpt("Smoke", &s, "eq_smoke");
         break;
         case "Torque":
             self addMenu(menu, "Torque");
                 self addOpt("Barricade", &s, "ability_smart_cover");
-                self addOpt("Razor Wire", &s, "Battery");
+                self addOpt("Razor Wire", &s, "eq_concertina_wire");
         break;
         case "Zero":
             self addMenu(menu, "Zero");
                 self addOpt("Ice Pick", &s, "gadget_icepick");
-                self addOpt("Emp Disruptor", &s, "hash_21b346649d376bf3");
+                self addOpt("Emp Disruptor", &s, "eq_emp_grenade");
         break;
         case "Killstreaks Menu":
             self addMenu(menu, "Killstreaks Menu");
@@ -241,6 +242,7 @@ runMenuIndex(menu)
                 self addOptIncSlider("Hitmarker Bind ", &hitmarker_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Damage Bind ", &damage_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Set To One Bind ", &set_to_one_bind, 1, 1, 4, 1);
+                self addOptIncSlider("Locational Teleport Bind ", &locational_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Jammed Bind ", &jammed_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Hellstorm Bind ", &hellstorm_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Mid-Air Prone Bind ", &prone_bind, 1, 1, 4, 1);
@@ -364,6 +366,7 @@ MenuOptionsPlayer(menu, player)
                 self addOptBool(player.oobdisabled, "Toggle OOB for Player", &disable_oob, player);
                 self addOptBool(player.godmode, "Toggle God Mode for Player", &Godmode, player);
                 self addOpt("Kill Player", &kill_player, player);
+                self addOpt("Make Invisible", &make_invisible, player);
                 self addOpt("Move Player To Me", &move_to, undefined, player);
                 self addOpt("Move Player To Crosshair", &move_to, self.origin, player);
                 self addOpt("Freeze Controls", &freeze_player_controls, player, true);
