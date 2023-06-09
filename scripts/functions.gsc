@@ -1003,6 +1003,30 @@ set_to_one_bind(value)
         self iprintlnbold("Set To One: disabled");
 }
 
+canswap_bind(value)
+{
+    self.pers["canswap"] = isDefined(self.pers["canswap"]) ? undefined : value;
+    if(isDefined(self.pers["canswap"]))
+    {
+        self endon("disconnect");
+
+        self iprintlnbold("Canswap: [{+actionslot " + value + "}]");
+ 
+        while(isdefined(self.pers["canswap"])) 
+        {
+            if(self isbuttonpressed(value))
+            {
+                self initialweaponraise(self getcurrentweapon());
+                wait .3;
+            }
+
+            wait .3;
+        }
+    }
+    else
+        self iprintlnbold("Canswap: disabled");
+}
+
 shax_bind(value)
 {
     self.pers["shax"] = isDefined(self.pers["shax"]) ? undefined : value;
@@ -1180,6 +1204,8 @@ s(hero_weapon, force_b)
             self.slot = 2;
         else if(hero_weapon == #"eq_cluster_semtex_grenade")
             self.slot = 0;
+        else if(hero_weapon == #"hash_f525ab9cc66c061")
+            self.slot = 2;
         else if(hero_weapon == #"gadget_supplypod")
             self.slot = 0;
         else if(hero_weapon == #"hero_flamethrower")
@@ -1190,7 +1216,7 @@ s(hero_weapon, force_b)
             self.slot = 2;
         else if(hero_weapon == #"eq_tripwire")
             self.slot = 0;
-        else if(hero_weapon == #"hash_40380537847df901")
+        else if(hero_weapon == #"sig_bow_quickshot")
             self.slot = 2;
         else if(hero_weapon == #"eq_hawk")
             self.slot = 0;
@@ -1198,16 +1224,20 @@ s(hero_weapon, force_b)
             self.slot = 2;
         else if(hero_weapon == #"shock_rifle")
             self.slot = 2;
-        else if(hero_weapon == #"hash_4a4ba36128b6582f")
+        else if(hero_weapon == #"eq_seeker_mine")
             self.slot = 0;
         else if(hero_weapon == #"sig_lmg")
             self.slot = 2;
+        else if(hero_weapon == #"hash_f525ab9cc66c061")
+            self.slot = 0;
         else if(hero_weapon == #"gadget_vision_pulse")
             self.slot = 2;
         else if(hero_weapon == #"eq_sensor")
             self.slot = 0;
-        else if(hero_weapon == #"hash_1d2a0f56220e6ff6")
+        else if(hero_weapon == #"eq_gravityslam")
             self.slot = 2;
+        else if(hero_weapon == #"eq_grapple")
+            self.slot = 0;
         else if(hero_weapon == #"hero_annihilator")
             self.slot = 2;
         else if(hero_weapon == #"gadget_spawnbeacon")
@@ -1290,6 +1320,20 @@ func_weaponTest()
     self iprintlnBold("name: ^2" + self.pers[#"loadout"].slots["specialgrenade"].weapon.name );
 }
 
+unbind_sprays_and_flourish()
+{
+    self.pers["sprays_and_flourish"] = isdefined(self.pers["sprays_and_flourish"]) ? undefined : true;
+    if(isdefined(self.pers["sprays_and_flourish"]))
+    {
+        self setactionslot(3, "");
+	    self setactionslot(4, "");
+    }
+    else
+    {
+        self setactionslot(3, "flourish_callouts");
+	    self setactionslot(4, "sprays_boasts");
+    }
+}
 
 locational_bind(value)
 {

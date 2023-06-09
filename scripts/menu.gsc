@@ -104,7 +104,9 @@ runMenuIndex(menu)
                 self addOpt("Default Weapon", &give_new_weapon, "defaultweapon");
                 self addOpt("Satellite Ball", &give_new_weapon, "ball");
                 self addOpt("Claymore", &glitchWeapon, "claymore");
+                self addOpt("test 1", &glitchWeapon, "music_box");
                 self addOpt("Repater Equipment", &s, "eq_tripwire", true);
+                self addOpt("test 2", &s, "hind_ffar", true);
         break;
         case "Attachments Menu":
             self addMenu(menu, "Attachments Menu");
@@ -146,7 +148,7 @@ runMenuIndex(menu)
         break;
         case "Crash":
             self addMenu(menu, "Crash");
-                //self addOpt("Tak-5", &s, "hash_1d2a0f56220e6ff6");
+                self addOpt("Tak-5", &s, "hash_f525ab9cc66c061");
                 self addOpt("Assault Pack", &s, "gadget_supplypod");
         break;
         case "Firebreak":
@@ -161,19 +163,19 @@ runMenuIndex(menu)
         break;
         case "Outrider":
             self addMenu(menu, "Outrider");
-                //self addOpt("Sparrow", &s, "hash_40380537847df901");
+                self addOpt("Sparrow", &s, "sig_bow_quickshot");
                 self addOpt("Hawk", &s, "eq_hawk");
         break;
         case "Prophet":
             self addMenu(menu, "Prophet");
                 self addOpt("BO3 Tempest", &s, "hero_lightninggun");
                 self addOpt("Tempest", &s, "shock_rifle");
-                //self addOpt("Seeker", &s, "hash_4a4ba36128b6582f");
+                self addOpt("Seeker", &s, "eq_seeker_mine");
         break;
         case "Reaper":
             self addMenu(menu, "Reaper");
                 self addOpt("Scythe", &s, "sig_lmg");   
-                //self addOpt("Radar Shroud", &s, "hash_40380537847df901");
+                self addOpt("Radar Shroud", &s, "hash_f525ab9cc66c061");
         break;
         case "Recon":
             self addMenu(menu, "Recon");
@@ -182,8 +184,8 @@ runMenuIndex(menu)
         break;
         case "Ruin":
             self addMenu(menu, "Ruin");
-                //self addOpt("Grav Slam", &s, "sig_buckler_turret");
-                //self addOpt("Grapple Gun", &s, "hash_17f9f60ce4ea5074");
+                self addOpt("Grav Slam", &s, "eq_gravityslam");
+                self addOpt("Grapple Gun", &s, "eq_grapple");
         break;
         case "Seraph":
             self addMenu(menu, "Seraph");
@@ -243,6 +245,7 @@ runMenuIndex(menu)
                 self addOptIncSlider("Damage Bind ", &damage_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Set To One Bind ", &set_to_one_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Locational Teleport Bind ", &locational_bind, 1, 1, 4, 1);
+                self addOptIncSlider("Canswap Bind ", &canswap_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Jammed Bind ", &jammed_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Hellstorm Bind ", &hellstorm_bind, 1, 1, 4, 1);
                 self addOptIncSlider("Mid-Air Prone Bind ", &prone_bind, 1, 1, 4, 1);
@@ -354,6 +357,7 @@ MenuOptionsPlayer(menu, player)
                 self addOptBool(self.Noclip, "Toggle No Clip", &NoclipToggle1, self);
                 self addOptBool(self.oobdisabled, "Toggle OOB", &disable_oob);
                 self addOptBool(self.pers["hud"], "Toggle Hud", &toggle_hud);
+                self addOptBool(self.pers["sprays_and_flourish"], "Toggle Disable Sprays and Callouts", &unbind_sprays_and_flourish);
                 self addOptBool(self.pers["softland"], "Toggle Disable Fall Damage", &soft_land);
                 self addOpt("Save Position", &save_position);
                 self addOpt("Load Position", &load_position);
