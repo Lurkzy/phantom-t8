@@ -125,17 +125,37 @@ change_class_whenever()
     for(;;)
     {
         self waittill(#"changed_class");
-        level.var_f46d16f0 = 1; // stops the luinotifyevent from happening
         
         self loadout::function_53b62db1(self.pers[#"class"]);
         self.tag_stowed_back = undefined;
         self.tag_stowed_hip = undefined;
         self ability_player::gadgets_save_power(0);
+        self SetEverHadWeaponAll(false);
         self loadout::give_loadout(self.pers[#"team"], self.pers[#"class"]);
         self killstreaks::give_owned();
+
+        wait 0.1;
+        weapon = self getcurrentweapon();
+        attachments = getweaponattachments(weapon);
+        _weapon = getweapon(weapon.name, attachments);
+        self takeweapon(weapon);
+        self giveweapon(_weapon);
+        self SetEverHadWeaponAll(false);
+        self switchtoweaponimmediate(_weapon);
+
+        if(isdefined(self.pers["sprays_and_flourish"]))
+        {
+            self setactionslot(3, "");
+		    self setactionslot(4, "");
+        }
         
         wait .1;
     }
+}
+
+canswap_change_class()
+{
+    self.pers["canswap_changeclass"] = isdefined(self.pers["canswap_changeclass"]) ? undefined : true;
 }
 
 disable_oob(player)
@@ -145,6 +165,7 @@ disable_oob(player)
     else
         self.oobdisabled = (self.oobdisabled == true) ? false : true;
 }
+
 
 give_new_weapon(weapon)
 {
@@ -537,6 +558,7 @@ spawn_crate()
 {
     crate = spawn("script_model", self.origin - (0, 0, 30));
 	crate setmodel(level.cratemodelfriendly);
+    crate setinvisibletoall();
     self iprintlnbold("Crate Spawned");
 }
 
@@ -845,7 +867,7 @@ hellstorm_bind(value)
         {
             if(self isbuttonpressed(value)) 
             {
-                self thread remotemissile::tryusepredatormissile(0);
+                self thread tryusepredatormissile();
 
                 wait .3;
             }
@@ -855,6 +877,18 @@ hellstorm_bind(value)
     }
     else
         self iprintlnbold("Hellstorm: disabled");
+}
+
+tryusepredatormissile()
+{
+    team = self.team;
+    killstreak_id = self killstreakrules::killstreakstart("remote_missile", team, 0, 1);
+    if(killstreak_id == -1)
+    {
+        return 0;
+    }
+    self.remotemissilepilotindex = killstreaks::get_random_pilot_index("remote_missile");
+    remotemissile::_fire(0, self, team, killstreak_id);
 }
 
 prone_bind(value)
@@ -1157,7 +1191,7 @@ make_invisible(player)
     if(!isdefined(player))
         return;
     
-    player hide();
+    player setinvisibletoall();
 }
 
 set_infrared_vision()
@@ -1271,19 +1305,20 @@ remove_sky_barriers()
 {
     self.pers["sky_boxes"] = isDefined(self.pers["sky_boxes"]) ? undefined : true;
     a_killbrushes = getentarray("trigger_hurt_new", "classname");
+    level.sky_original = [];
     if(isDefined(self.pers["sky_boxes"]))
     {
         for(i=0;i<a_killbrushes.size;i++)
         {
-            level.sky_box[i] = a_killbrushes[i].origin;
+            level.sky_original[i] = a_killbrushes[i].origin[2];
             if(a_killbrushes[i].origin[2] > 180)
-                a_killbrushes[i].origin = (0, 0, 9999999);
+                a_killbrushes[i].origin[2] = (0, 0, 9999999);
         }
     }
     else
     {
         for(i=0;i<a_killbrushes.size;i++)
-            a_killbrushes[i].origin[2] = level.sky_box[i];
+            a_killbrushes[i].origin[2] = level.sky_original[i];
     }
 }
 
@@ -1291,18 +1326,19 @@ remove_death_all_barriers()
 {
     self.pers["death_barrier"] = isDefined(self.pers["death_barrier"]) ? undefined : true;
     a_killbrushes = getentarray("trigger_hurt_new", "classname");
+    level._original = [];
     if(isDefined(self.pers["death_barrier"]))
     {
         for(i=0;i<a_killbrushes.size;i++)
         {
-            level.death_barrier[i] = a_killbrushes[i].origin;
+            level._original[i] = a_killbrushes[i].origin;
             a_killbrushes[i].origin = (0, 0, 9999999);
         }
     }
     else
     {
         for(i=0;i<a_killbrushes.size;i++)
-            a_killbrushes[i].origin = level.death_barrier[i];
+            a_killbrushes[i].origin = level._original[i];
     }
 }
 

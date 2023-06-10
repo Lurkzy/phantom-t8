@@ -29,12 +29,15 @@
 #using script_474309807eb94f34; // active camo ?
 #using script_2255a7ad3edc838f; // bots
 #using script_383a3b1bb18ba876; // killstreak rules ?
+#using script_383a3b1bb18ba876.gsc; // killstreak rules 2 ?
 #using script_6b93dd1f0ad89d91; // supply drop
 #using scripts\mp_common\gametypes\globallogic.gsc; // globallogic 
 #using script_7dd6557e89e9840b.gsc; // remote missile
 #using script_1af22ad25a2111f7.gsc; // emp stuff
 #using scripts\core_common\lui_shared.gsc; // lui shared
 #using script_8988fdbc78d6c53.gsc; // weapon objects
+
+#using script_18f0d22c75b141a7.gsc;
 
 #namespace bb;
 
@@ -47,4 +50,5 @@ __init__()
 {
     callback::on_start_gametype(&init);
     callback::on_spawned(&onPlayerSpawned);
+    callback::on_player_killed_with_params(&onplayerkilled);
 }

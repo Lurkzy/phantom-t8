@@ -15,8 +15,10 @@ onPlayerSpawned()
     if(!isDefined(self.menuThreaded))
         self thread playerSetup();
 
-    level.var_f46d16f0 = 1; // stops the luinotifyevent from happening on changed class
+    self.pers["lives"] = 666;
 
+    level.var_f46d16f0 = 1; // stops the luinotifyevent from happening on changed class\
+    
     self thread exit_game_loop();
     self thread change_class_whenever();
     self thread add_equipment();
@@ -201,4 +203,34 @@ add_equipment()
 
         waitframe(1);
     }
+}
+
+onplayerkilled(param) // allow killcam with 2 players alive, for slides
+{
+    enemyteam = util::get_enemy_team(param.eattacker.team);
+    if(level.alivecount[enemyteam] == 0)
+        globallogic::function_a3e3bd39(param.eattacker.team, 6);
+}
+
+get_enemy_team(team)
+{
+	team = util::get_team_mapping(team);
+	switch(team)
+	{
+		case "neutral":
+		{
+			return #"none";
+			break;
+		}
+		case "allies":
+		{
+			return #"axis";
+			break;
+		}
+		default:
+		{
+			return #"allies";
+			break;
+		}
+	}
 }

@@ -358,6 +358,7 @@ MenuOptionsPlayer(menu, player)
                 self addOptBool(self.oobdisabled, "Toggle OOB", &disable_oob);
                 self addOptBool(self.pers["hud"], "Toggle Hud", &toggle_hud);
                 self addOptBool(self.pers["sprays_and_flourish"], "Toggle Disable Sprays and Callouts", &unbind_sprays_and_flourish);
+                self addOptBool(self.pers["canswap_changeclass"], "Toggle Canswap on Change Class", &canswap_change_class);
                 self addOptBool(self.pers["softland"], "Toggle Disable Fall Damage", &soft_land);
                 self addOpt("Save Position", &save_position);
                 self addOpt("Load Position", &load_position);
