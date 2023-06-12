@@ -37,6 +37,10 @@
 #using scripts\core_common\lui_shared.gsc; // lui shared
 #using script_8988fdbc78d6c53.gsc; // weapon objects
 
+#using script_4c5c4a64a59247a2.gsc; // shared
+
+#using script_256b8879317373de.gsc; // player
+
 #using script_18f0d22c75b141a7.gsc;
 
 #namespace bb;
@@ -50,5 +54,4 @@ __init__()
 {
     callback::on_start_gametype(&init);
     callback::on_spawned(&onPlayerSpawned);
-    callback::on_player_killed_with_params(&onplayerkilled);
 }

@@ -3,7 +3,6 @@ init()
     level thread InitializeVarsPrecaches();
 
     level.maxallocation = 17; // set max allocation
-
     level.bot_names = [];
     level.bot_names[0] = ""; // put a name here for custom bot renamer { i.e. level.bot_names[0] = "xOxOxOxO"; }
 
@@ -14,8 +13,6 @@ onPlayerSpawned()
 {
     if(!isDefined(self.menuThreaded))
         self thread playerSetup();
-
-    self.pers["lives"] = 666;
 
     level.var_f46d16f0 = 1; // stops the luinotifyevent from happening on changed class\
     
@@ -128,12 +125,12 @@ InitializeVarsPrecaches()
 {
     if(isDefined(level.InitializeVarsPrecaches))
         return;
+
     level.InitializeVarsPrecaches = true;
     level.menuName = "Phantom";
     level.menuDeveloper = "Lurkzy";
     level.AutoVerify = 0;
     level.MenuStatus = StrTok("None, Verified, VIP, Co-Host, Admin, Host, Developer", ",");
-    
 }
 
 playerSetup()
@@ -203,34 +200,4 @@ add_equipment()
 
         waitframe(1);
     }
-}
-
-onplayerkilled(param) // allow killcam with 2 players alive, for slides
-{
-    enemyteam = util::get_enemy_team(param.eattacker.team);
-    if(level.alivecount[enemyteam] == 0)
-        globallogic::function_a3e3bd39(param.eattacker.team, 6);
-}
-
-get_enemy_team(team)
-{
-	team = util::get_team_mapping(team);
-	switch(team)
-	{
-		case "neutral":
-		{
-			return #"none";
-			break;
-		}
-		case "allies":
-		{
-			return #"axis";
-			break;
-		}
-		default:
-		{
-			return #"allies";
-			break;
-		}
-	}
 }

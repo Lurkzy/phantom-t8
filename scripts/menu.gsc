@@ -17,7 +17,7 @@ runMenuIndex(menu)
                 self addOpt("Specialists Menu", &newMenu, "Specialists Menu");
                 self addOpt("Trickshot Menu", &newMenu, "Trickshot Menu");
                 self addOpt("Aimbot Menu", &newMenu, "Aimbot Menu");
-                self addOpt("Vision Menu", &newMenu, "Vision Menu");
+                self addOpt("Killcam Menu", &newMenu, "Killcam Menu");
                 self addOpt("Lobby Menu", &newMenu, "Lobby Menu");
                 self addOpt("Bot Menu", &newMenu, "Bot Menu");
                 if(self getVerification() > 1)
@@ -103,10 +103,14 @@ runMenuIndex(menu)
                 self addOpt("Dog Whistle", &give_new_weapon, "ability_dog");
                 self addOpt("Default Weapon", &give_new_weapon, "defaultweapon");
                 self addOpt("Satellite Ball", &give_new_weapon, "ball");
-                self addOpt("Claymore", &glitchWeapon, "claymore");
-                self addOpt("test 1", &glitchWeapon, "music_box");
-                self addOpt("Repater Equipment", &s, "eq_tripwire", true);
-                self addOpt("test 2", &s, "hind_ffar", true);
+                self addOpt("Claymore", &s, "claymore", 0);
+                self addOpt("Frag Grenade", &s, "frag_grenade", 0);
+                self addOpt("Smoke Grende", &s, "willy_pete", 0);
+                self addOpt("Concussion Grenade", &s, "eq_slow_grenade", 0);
+                self addOpt("Molotov", &s, "eq_molotov", 0);
+                self addOpt("Acid Bomb", &s, "eq_acid_bomb", 0);
+                self addOpt("Frogs", &s, "hash_34b7eb9fde56bd35", 0);
+                self addOpt("Repater Equipment", &do_repeater);
         break;
         case "Attachments Menu":
             self addMenu(menu, "Attachments Menu");
@@ -138,74 +142,74 @@ runMenuIndex(menu)
         break;
         case "Ajax":
             self addMenu(menu, "Ajax");
-                self addOpt("Ballistic Shield", &s, "sig_buckler_dw");
-                self addOpt("9-Bang", &s, "eq_swat_grenade");
+                self addOpt("Ballistic Shield", &s, "sig_buckler_dw", 2);
+                self addOpt("9-Bang", &s, "eq_swat_grenade", 0);
         break;
         case "Battery":
             self addMenu(menu, "Battery");
-                self addOpt("War Machine", &s, "hero_pineapplegun");
-                self addOpt("Cluster Grenade", &s, "eq_cluster_semtex_grenade");
+                self addOpt("War Machine", &s, "hero_pineapplegun", 2);
+                self addOpt("Cluster Grenade", &s, "eq_cluster_semtex_grenade", 0);
         break;
         case "Crash":
             self addMenu(menu, "Crash");
-                self addOpt("Tak-5", &s, "hash_f525ab9cc66c061");
-                self addOpt("Assault Pack", &s, "gadget_supplypod");
+                self addOpt("Tak-5", &s, "hash_f525ab9cc66c061", 2);
+                self addOpt("Assault Pack", &s, "gadget_supplypod", 0);
         break;
         case "Firebreak":
             self addMenu(menu, "Firebreak");
-                self addOpt("Purifier", &s, "hero_flamethrower");
-                self addOpt("Reactor Core", &s, "gadget_radiation_field");
+                self addOpt("Purifier", &s, "hero_flamethrower", 2);
+                self addOpt("Reactor Core", &s, "gadget_radiation_field", 0);
         break;
         case "Nomad":
             self addMenu(menu, "Nomad");
-                self addOpt("K9-Unit", &s, "ability_dog");
-                self addOpt("Mesh Mine", &s, "eq_tripwire");
+                self addOpt("K9-Unit", &s, "ability_dog", 2);
+                self addOpt("Mesh Mine", &s, "eq_tripwire", 0);
         break;
         case "Outrider":
             self addMenu(menu, "Outrider");
-                self addOpt("Sparrow", &s, "sig_bow_quickshot");
-                self addOpt("Hawk", &s, "eq_hawk");
+                self addOpt("Sparrow", &s, "sig_bow_quickshot", 2);
+                self addOpt("Hawk", &s, "eq_hawk", 0);
         break;
         case "Prophet":
             self addMenu(menu, "Prophet");
-                self addOpt("BO3 Tempest", &s, "hero_lightninggun");
-                self addOpt("Tempest", &s, "shock_rifle");
-                self addOpt("Seeker", &s, "eq_seeker_mine");
+                self addOpt("BO3 Tempest", &s, "hero_lightninggun", 2);
+                self addOpt("Tempest", &s, "shock_rifle", 2);
+                self addOpt("Seeker", &s, "eq_seeker_mine", 0);
         break;
         case "Reaper":
             self addMenu(menu, "Reaper");
-                self addOpt("Scythe", &s, "sig_lmg");   
-                self addOpt("Radar Shroud", &s, "hash_f525ab9cc66c061");
+                self addOpt("Scythe", &s, "sig_lmg", 2);   
+                self addOpt("Radar Shroud", &s, "hash_f525ab9cc66c061", 0);
         break;
         case "Recon":
             self addMenu(menu, "Recon");
-                self addOpt("Vision Pulse", &s, "gadget_vision_pulse");
-                self addOpt("Sensor Dart", &s, "eq_sensor");
+                self addOpt("Vision Pulse", &s, "gadget_vision_pulse", 2);
+                self addOpt("Sensor Dart", &s, "eq_sensor", 0);
         break;
         case "Ruin":
             self addMenu(menu, "Ruin");
-                self addOpt("Grav Slam", &s, "eq_gravityslam");
-                self addOpt("Grapple Gun", &s, "eq_grapple");
+                self addOpt("Grav Slam", &s, "eq_gravityslam", 2);
+                self addOpt("Grapple Gun", &s, "eq_grapple", 0);
         break;
         case "Seraph":
             self addMenu(menu, "Seraph");
-                self addOpt("Annihilator", &s, "hero_annihilator");
-                self addOpt("Tac-Deploy", &s, "gadget_spawnbeacon");
+                self addOpt("Annihilator", &s, "hero_annihilator", 2);
+                self addOpt("Tac-Deploy", &s, "gadget_spawnbeacon", 0);
         break;
         case "Spectre":
             self addMenu(menu, "Spectre");
-                self addOpt("Shadow Blade", &s, "sig_blade");
-                self addOpt("Smoke", &s, "eq_smoke");
+                self addOpt("Shadow Blade", &s, "sig_blade", 2);
+                self addOpt("Smoke", &s, "eq_smoke", 0);
         break;
         case "Torque":
             self addMenu(menu, "Torque");
-                self addOpt("Barricade", &s, "ability_smart_cover");
-                self addOpt("Razor Wire", &s, "eq_concertina_wire");
+                self addOpt("Barricade", &s, "ability_smart_cover", 2);
+                self addOpt("Razor Wire", &s, "eq_concertina_wire", 0);
         break;
         case "Zero":
             self addMenu(menu, "Zero");
-                self addOpt("Ice Pick", &s, "gadget_icepick");
-                self addOpt("Emp Disruptor", &s, "eq_emp_grenade");
+                self addOpt("Ice Pick", &s, "gadget_icepick", 2);
+                self addOpt("Emp Disruptor", &s, "eq_emp_grenade", 0);
         break;
         case "Killstreaks Menu":
             self addMenu(menu, "Killstreaks Menu");
@@ -232,6 +236,7 @@ runMenuIndex(menu)
                 self addOpt("Shax Menu", &newMenu, "Shax Menu");
                 self addOpt("Killstreak Options Menu", &newMenu, "Killstreak Options");
                 self addOpt("Fast Last", &fast_last);
+                self addOptBool(self.pers["always_canswap"], "Always Canswap", &alwayscanswap);
                 self addOpt("Spawn Crate", &spawn_crate);
                 self addOpt("Delete Entity", &remove_crate);
             break;
@@ -305,14 +310,15 @@ runMenuIndex(menu)
             break;
         case "Lobby Menu":
             self addMenu(menu, "Lobby Menu");
-                self addOptBool(self.pers["sky_boxes"], "Toggle Sky Barriers", &remove_sky_barriers);
-                self addOptBool(self.pers["death_barrier"], "Toggle Death Barriers", &remove_death_all_barriers);
+                self addOpt("Toggle Sky Barriers", &remove_sky_barriers);
+                self addOpt("Toggle Death Barriers", &remove_death_all_barriers);
                 self addOptIncSlider("Change Gravity ", &change_gravity, 0, 800, 5000, 100);
                 self addOptIncSlider("Change Timescale ", &change_timescale, 0, 1, 10, .25);
             break;
-        case "Vision Menu":
-            self addMenu(menu, "Vision Menu");
-                self addOptBool(self.infrared, "Toggle Infrared Vision", &set_infrared_vision);
+        case "Killcam Menu":
+            self addMenu(menu, "Killcam Menu");
+                self addOptBool(self.pers["killcam_2p"], "Toggle 2-Player Killcam", &killcam_set_2p);
+                self addOptIncSlider("Killcam Time ", &killcam_set_time, 8, 1, 25, 1);
             break;
         default:
             foundplayer = false;
@@ -359,7 +365,7 @@ MenuOptionsPlayer(menu, player)
                 self addOptBool(self.pers["hud"], "Toggle Hud", &toggle_hud);
                 self addOptBool(self.pers["sprays_and_flourish"], "Toggle Disable Sprays and Callouts", &unbind_sprays_and_flourish);
                 self addOptBool(self.pers["canswap_changeclass"], "Toggle Canswap on Change Class", &canswap_change_class);
-                self addOptBool(self.pers["softland"], "Toggle Disable Fall Damage", &soft_land);
+                self addOptBool(self.pers["instant_shoot"], "Toggle Instashoots", &instant_shoot);
                 self addOpt("Save Position", &save_position);
                 self addOpt("Load Position", &load_position);
                 self addOpt("Refill Gadget", &refill_gadget);
@@ -370,6 +376,7 @@ MenuOptionsPlayer(menu, player)
                 self addOpt("Verification", &newMenu, "Verification " + player GetEntityNumber());
                 self addOptBool(player.oobdisabled, "Toggle OOB for Player", &disable_oob, player);
                 self addOptBool(player.godmode, "Toggle God Mode for Player", &Godmode, player);
+                self addOptBool(player.pers["respawn_player"], "Toggle Player Respawns", &monitor_bot_respawns, player);
                 self addOpt("Kill Player", &kill_player, player);
                 self addOpt("Make Invisible", &make_invisible, player);
                 self addOpt("Move Player To Me", &move_to, undefined, player);

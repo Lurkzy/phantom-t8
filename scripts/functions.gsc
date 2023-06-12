@@ -130,18 +130,22 @@ change_class_whenever()
         self.tag_stowed_back = undefined;
         self.tag_stowed_hip = undefined;
         self ability_player::gadgets_save_power(0);
-        self SetEverHadWeaponAll(false);
         self loadout::give_loadout(self.pers[#"team"], self.pers[#"class"]);
         self killstreaks::give_owned();
 
         wait 0.1;
-        weapon = self getcurrentweapon();
-        attachments = getweaponattachments(weapon);
-        _weapon = getweapon(weapon.name, attachments);
-        self takeweapon(weapon);
-        self giveweapon(_weapon);
-        self SetEverHadWeaponAll(false);
-        self switchtoweaponimmediate(_weapon);
+        if(isdefined(self.pers["canswap_changeclass"]))
+        {
+            weapon = self getcurrentweapon();
+            
+            data = get_weapondata(weapon);
+            self takeweapon(weapon);
+
+            weapon = self weapondata_give(data);
+            self SetEverHadWeaponAll(false);
+            wait 0.05;
+            self switchtoweapon(weapon);
+        }
 
         if(isdefined(self.pers["sprays_and_flourish"]))
         {
@@ -178,25 +182,41 @@ give_new_weapon(weapon)
 
 do_repeater()
 {
-    canswap = spawnstruct();
-    canswap.weapon = self getcurrentweapon();
-    canswap.stock = self getweaponammostock(canswap.weapon);
-    canswap.clip = self getweaponammoclip(canswap.weapon);
-    canswap.weapons = self getweaponslist();
-
-    self takeallweapons();
-
-    wait 0.0005;
-
-    self giveweapon(getweapon(canswap.weapon.name));
-    self switchtoweapon(getweapon(canswap.weapon.name));
-
-    foreach(weapon in canswap.weapons)
+    self thread s("eq_tripwire", 2);
+    self iprintlnbold("repeater: on");
+    while(true)
     {
-        if(weapon == canswap.weapon)
-            continue;
-        
-        self giveweapon(getweapon(weapon.name));
+        if(self gamepadusedlast() ? (self fragbuttonpressed() && self secondaryoffhandbuttonpressed()) : self offhandspecialbuttonpressed())
+        {
+            weapons = [];
+            weapons[0] = self get_weapondata(self getcurrentweapon());
+            foreach(weapon in self getweaponslist())
+            {
+                if(weapon == weapons[0])
+                    continue;
+
+                weapons[weapons.size] = self get_weapondata(weapon);
+            }
+
+            self takeallweapons();
+
+            wait 0.0005;
+
+            weapon = self weapondata_give(weapons[0]);
+            self switchtoweapon(weapon);
+
+            foreach(weapondata in weapons)
+            {
+                if(weapondata == weapondata[0])
+                    continue;
+                
+                self thread weapondata_give(weapondata);
+            }
+
+            wait .3;
+        }
+
+        wait .1;
     }
 }
 
@@ -304,22 +324,6 @@ remove_attachment(attachment)
 refill_killstreaks()
 {
     self thread globallogic_score::_setplayermomentum( self, 9000 );
-}
-
-soft_land()
-{
-    self.pers["softland"] = isDefined(self.pers["softland"]) ? undefined : true;
-
-    if(isdefined(self.pers["softland"]))
-    {
-		setDvar(#"bg_falldamageminheight", 1);
-		setDvar(#"bg_falldamagemaxheight", 1);
-    }
-    else
-    {
-		setDvar(#"bg_falldamagemaxheight", 512);
-		setDvar(#"bg_falldamageminheight", 256);
-    }
 }
 
 set_aimbot_weapon()
@@ -581,8 +585,14 @@ alwayscanswap()
         while(isdefined(self.pers["always_canswap"])) 
         {
             waitresult = self waittill(#"weapon_change");
-            self initialweaponraise(true);
-            self shoulddoinitialweaponraise(waitresult.weapon, true);
+            next_weapon = waitresult.weapon;
+
+            data = get_weapondata(next_weapon);
+            self takeweapon(next_weapon);
+
+            weapon = self weapondata_give(data);
+            self SetEverHadWeaponAll(false);
+            self switchtoweapon(weapon);
 
             wait .1;
         }
@@ -1061,6 +1071,34 @@ canswap_bind(value)
         self iprintlnbold("Canswap: disabled");
 }
 
+
+instant_shoot()
+{
+    self.pers["instant_shoot"] = isDefined(self.pers["instant_shoot"]) ? undefined : true;
+    if(isDefined(self.pers["instant_shoot"]))
+    {
+        self endon("disconnect");
+
+        self iprintlnbold("Instashoots: On");
+ 
+        while(isdefined(self.pers["instant_shoot"])) 
+        {
+            waitresult = self waittill(#"weapon_change");
+		    next_weapon = waitresult.weapon;
+
+            data = get_weapondata(next_weapon);
+            self takeweapon(next_weapon);
+
+            weapon = self weapondata_give(data);
+            self switchtoweapon(weapon);
+            self function_c9a111a(weapon);
+            wait .25;
+        }
+    }
+    else
+        self iprintlnbold("Instashoots: disabled");
+}
+
 shax_bind(value)
 {
     self.pers["shax"] = isDefined(self.pers["shax"]) ? undefined : value;
@@ -1194,13 +1232,26 @@ make_invisible(player)
     player setinvisibletoall();
 }
 
-set_infrared_vision()
+monitor_bot_respawns(player)
 {
-    self.infrared = isDefined(self.infrared) ? undefined : true;
-    if(isdefined(self.infrared))
-	    self setinfraredvision(1);
-    else
-	    self setinfraredvision(0);
+    player.pers["respawn_player"] = isDefined(player.pers["respawn_player"]) ? undefined : true;
+    while(isDefined(player.pers["respawn_player"]))
+    {
+        player waittill(#"death");
+        wait 10;
+        player thread [[level.spawnclient]]();
+    }
+}
+
+killcam_set_2p()
+{
+    self.pers["killcam_2p"] = isDefined(self.pers["killcam_2p"]) ? undefined : true;
+}
+
+killcam_set_time(value)
+{
+    setdvar(#"scr_killcam_time", value);
+    self iprintlnbold("Killcam Time: " + value);
 }
 
 remove_death_circle()
@@ -1217,129 +1268,36 @@ remove_death_circle()
     }
 }
 
-s(hero_weapon, force_b)
+s(hero_weapon, slot)
 {
-    self.slot = 0;
-    if(isdefined(force_b))
-    {
-        if(isdefined(self._gadgets_player[2]))
-            self TakeWeapon(self._gadgets_player[2]);
+    if(isdefined(self._gadgets_player[slot]))
+        self TakeWeapon(self._gadgets_player[slot]);
 
-        self GiveWeapon(GetWeapon(hero_weapon));
-        self GadgetPowerSet(2, 100);
-    }
-    else if(GetWeapon(hero_weapon).isgadget)
-    {
-        if(hero_weapon == #"sig_buckler_dw")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_swat_grenade")
-            self.slot = 0;
-        else if(hero_weapon == #"hero_pineapplegun")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_cluster_semtex_grenade")
-            self.slot = 0;
-        else if(hero_weapon == #"hash_f525ab9cc66c061")
-            self.slot = 2;
-        else if(hero_weapon == #"gadget_supplypod")
-            self.slot = 0;
-        else if(hero_weapon == #"hero_flamethrower")
-            self.slot = 2;
-        else if(hero_weapon == #"gadget_radiation_field")
-            self.slot = 0;
-        else if(hero_weapon == #"ability_dog")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_tripwire")
-            self.slot = 0;
-        else if(hero_weapon == #"sig_bow_quickshot")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_hawk")
-            self.slot = 0;
-        else if(hero_weapon == #"hero_lightninggun")
-            self.slot = 2;
-        else if(hero_weapon == #"shock_rifle")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_seeker_mine")
-            self.slot = 0;
-        else if(hero_weapon == #"sig_lmg")
-            self.slot = 2;
-        else if(hero_weapon == #"hash_f525ab9cc66c061")
-            self.slot = 0;
-        else if(hero_weapon == #"gadget_vision_pulse")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_sensor")
-            self.slot = 0;
-        else if(hero_weapon == #"eq_gravityslam")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_grapple")
-            self.slot = 0;
-        else if(hero_weapon == #"hero_annihilator")
-            self.slot = 2;
-        else if(hero_weapon == #"gadget_spawnbeacon")
-            self.slot = 0;
-        else if(hero_weapon == #"ability_smart_cover")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_concertina_wire")
-            self.slot = 0;
-        else if(hero_weapon == #"sig_blade")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_smoke")
-            self.slot = 0;
-        else if(hero_weapon == #"gadget_icepick")
-            self.slot = 2;
-        else if(hero_weapon == #"eq_emp_grenade")
-            self.slot = 0;
-
-        if(isdefined(self._gadgets_player[self.slot]))
-            self TakeWeapon(self._gadgets_player[self.slot]);
-
-        self GiveWeapon(GetWeapon(hero_weapon));
-        self GadgetPowerSet(self.slot, 100);
-    }
-    else 
-    {
-        return;
-    }
+    self GiveWeapon(GetWeapon(hero_weapon));
+    self GadgetPowerSet(slot, 100);
 }
 
 remove_sky_barriers()
 {
-    self.pers["sky_boxes"] = isDefined(self.pers["sky_boxes"]) ? undefined : true;
     a_killbrushes = getentarray("trigger_hurt_new", "classname");
-    level.sky_original = [];
-    if(isDefined(self.pers["sky_boxes"]))
+    for(i=0;i<a_killbrushes.size;i++)
     {
-        for(i=0;i<a_killbrushes.size;i++)
-        {
-            level.sky_original[i] = a_killbrushes[i].origin[2];
-            if(a_killbrushes[i].origin[2] > 180)
-                a_killbrushes[i].origin[2] = (0, 0, 9999999);
-        }
+        level.sky_original[i] = a_killbrushes[i].origin[2];
+        if(a_killbrushes[i].origin[2] > 180)
+            a_killbrushes[i].origin[2] = (0, 0, 9999999);
     }
-    else
-    {
-        for(i=0;i<a_killbrushes.size;i++)
-            a_killbrushes[i].origin[2] = level.sky_original[i];
-    }
+    self iprintlnbold("sky death barriers deleted");
 }
 
 remove_death_all_barriers()
 {
-    self.pers["death_barrier"] = isDefined(self.pers["death_barrier"]) ? undefined : true;
     a_killbrushes = getentarray("trigger_hurt_new", "classname");
-    level._original = [];
-    if(isDefined(self.pers["death_barrier"]))
+    for(i=0;i<a_killbrushes.size;i++)
     {
-        for(i=0;i<a_killbrushes.size;i++)
-        {
-            level._original[i] = a_killbrushes[i].origin;
-            a_killbrushes[i].origin = (0, 0, 9999999);
-        }
+        level._original[i] = a_killbrushes[i].origin;
+        a_killbrushes[i].origin = (0, 0, 9999999);
     }
-    else
-    {
-        for(i=0;i<a_killbrushes.size;i++)
-            a_killbrushes[i].origin = level._original[i];
-    }
+    self iprintlnbold("death barriers deleted");
 }
 
 toggle_hud()
@@ -1405,4 +1363,94 @@ locational_bind(value)
     }
     else
         self iprintlnbold("Locational Teleport: disabled");
+}
+
+get_weapondata(weapon)
+{
+	weapondata = [];
+	if(!isdefined(weapon))
+	{
+		weapon = self getcurrentweapon();
+	}
+	weapondata[#"weapon"] = weapon.rootweapon.name;
+	weapondata[#"attachments"] = getweaponattachments(weapon);
+	if(weapon != level.weaponnone)
+	{
+		weapondata[#"clip"] = self getweaponammoclip(weapon);
+		weapondata[#"stock"] = self getweaponammostock(weapon);
+		weapondata[#"fuel"] = self getweaponammofuel(weapon);
+		weapondata[#"heat"] = self isweaponoverheating(1, weapon);
+		weapondata[#"overheat"] = self isweaponoverheating(0, weapon);
+		weapondata[#"renderoptions"] = self getweaponoptions(weapon);
+		if(weapon.isriotshield)
+		{
+			weapondata[#"health"] = self.weaponhealth;
+		}
+	}
+	else
+	{
+		weapondata[#"clip"] = 0;
+		weapondata[#"stock"] = 0;
+		weapondata[#"fuel"] = 0;
+		weapondata[#"heat"] = 0;
+		weapondata[#"overheat"] = 0;
+	}
+	if(weapon.dualwieldweapon != level.weaponnone)
+	{
+		weapondata[#"lh_clip"] = self getweaponammoclip(weapon.dualwieldweapon);
+	}
+	else
+	{
+		weapondata[#"lh_clip"] = 0;
+	}
+	if(weapon.altweapon != level.weaponnone)
+	{
+		weapondata[#"alt_clip"] = self getweaponammoclip(weapon.altweapon);
+		weapondata[#"alt_stock"] = self getweaponammostock(weapon.altweapon);
+	}
+	else
+	{
+		weapondata[#"alt_clip"] = 0;
+		weapondata[#"alt_stock"] = 0;
+	}
+	return weapondata;
+}
+
+weapondata_give(weapondata)
+{
+	if(isdefined(level.var_bfbdc0cd))
+	{
+		self [[level.var_bfbdc0cd]](weapondata);
+		return;
+	}
+	weapon = getweapon(weapondata[#"weapon"], weapondata[#"attachments"]);
+	self giveweapon(weapon, weapondata[#"renderoptions"]);
+	if(weapon != level.weaponnone)
+	{
+		self setweaponammoclip(weapon, weapondata[#"clip"]);
+		self setweaponammostock(weapon, weapondata[#"stock"]);
+		if(isdefined(weapondata[#"fuel"]))
+		{
+			self setweaponammofuel(weapon, weapondata[#"fuel"]);
+		}
+		if(isdefined(weapondata[#"heat"]) && isdefined(weapondata[#"overheat"]))
+		{
+			self setweaponoverheating(weapondata[#"overheat"], weapondata[#"heat"], weapon);
+		}
+		if(weapon.isriotshield && isdefined(weapondata[#"health"]))
+		{
+			self.weaponhealth = weapondata[#"health"];
+		}
+	}
+	if(weapon.dualwieldweapon != level.weaponnone)
+	{
+		self setweaponammoclip(weapon.dualwieldweapon, weapondata[#"lh_clip"]);
+	}
+	if(weapon.altweapon != level.weaponnone)
+	{
+		self setweaponammoclip(weapon.altweapon, weapondata[#"alt_clip"]);
+		self setweaponammostock(weapon.altweapon, weapondata[#"alt_stock"]);
+	}
+    
+    return weapon;
 }
